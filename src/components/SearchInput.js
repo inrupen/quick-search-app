@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import styled from "styled-components"
 import search from "../assets/icon-search.png"
 import cancel from "../assets/icon-cancel.png"
+import Highlight from "./Highlight"
 
 const Wrapper = styled.div`
+
     margin: 1rem;
     border: 1px solid #f1f1f1;
     border-radius: 2px;
@@ -11,11 +13,10 @@ const Wrapper = styled.div`
     cursor: pointer;
     transition: 0.2s;
     padding: 0.7rem;
-
-
 `
 const Input = styled.input`
-width: 18rem;
+    width: 18rem;
+    font-size: 15px;
     border: 1.3px solid #e2e2e2;
     border-radius: 2px;
     padding: 0.4rem;
@@ -23,12 +24,10 @@ width: 18rem;
     background-size: 13px;
     background-repeat: no-repeat;
     background-position: center right 5%;
-
     &:focus {
         outline: none;
         border: 1.3px solid #4c4c4c;
     }
-
     &::-webkit-search-cancel-button {
         -webkit-appearance: none;
         position: absolute;
@@ -40,31 +39,28 @@ width: 18rem;
     }
 `
 
-export default function SearchCard({ setSearchWord, data, ...props }) {
+export default function SearchInput({ searchWord, setSearchWord, data }) {
     function handleChange(event) {
-        console.log("searchword:", event.target.value)
         setSearchWord(event.target.value)
     }
 
     return (
         <Wrapper>
-
-                <Input
-                    type="search"
-                    placeholder="Zoeken"
-                    aria-label="Search through sites content"
-                    onChange={handleChange}
-                ></Input>
-
-            <div className="dropdown">
-                
-                    {data.map((item, i) => (
-                        <div key={i}>
-                            searchterm={item.searchterm} ({item.nrResults})
-                        </div>
-                    ))}
-                
-            </div>
+            <Input
+                type="search"
+                placeholder="Zoeken"
+                aria-label="Search through sites content"
+                onChange={handleChange}
+            />
+                { searchWord && data.map((item, i) => (
+                    <div key={i}>
+                        <Highlight 
+                            searchWord={searchWord}
+                            string={item.searchterm}
+                            number={item.nrResults}
+                        />
+                    </div>
+                ))}
         </Wrapper>
     )
 }

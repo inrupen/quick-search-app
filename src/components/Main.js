@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 import Header from "./Header"
-import SearchCard from "./SearchCard"
+import SearchInput from "./SearchInput"
 
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    .alignCard {
+    .search {
         display: flex;
         justify-content: center;
         height: 30rem;
@@ -33,10 +33,10 @@ export default function Main() {
                 .then(
                     result => {
                         const allSuggestions = result.suggestions
-                        const filter = allSuggestions.filter( item =>{
+                        const filtered = allSuggestions.filter( item =>{
                             return ( item.searchterm.match(regex))
                         })
-                        setFilteredData(filter)
+                        setFilteredData(filtered)
                     },
                     error => {
                         console.log("error:", error)
@@ -51,10 +51,8 @@ export default function Main() {
     return (
         <Wrapper>
             <Header />
-
-            <div className="alignCard">
-                {/* { CardGrid } */}
-                <SearchCard data={filteredData} setSearchWord={setSearchWord} />
+            <div className="search">
+                <SearchInput data={filteredData} searchWord={searchWord} setSearchWord={setSearchWord} />
             </div>
         </Wrapper>
     )
