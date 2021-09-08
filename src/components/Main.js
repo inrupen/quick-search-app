@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import styled from "styled-components"
-import Header from "./Header"
-import SearchInput from "./SearchInput"
+import Header from "./Header/Header"
+import InputSearch from "./InputSearch/InputSearch"
 
 const Wrapper = styled.div`
     display: flex;
@@ -16,25 +16,23 @@ const Wrapper = styled.div`
 `
 
 export default function Main() {
-    const [jsonData, setJsonData] = useState([])
     const [filteredData, setFilteredData] = useState([])
     const [searchWord, setSearchWord] = useState("")
 
     useEffect(() => {
-        if(searchWord.length === 0 )
-        {
+        if (searchWord.length <= 1 || searchWord === "") {
             setFilteredData([])
-        }else{
-        const regex = new RegExp(`.*${searchWord}`, 'gi');
-        const url = `/search?q=${searchWord}`
-        const fetchData = async () => {
-            await fetch(url)
+        }
+        if (searchWord.length >= 2) {
+            const regex = new RegExp(`.*${searchWord}`, "gi")
+            const url = `/search?q=${searchWord}`
+            fetch(url)
                 .then(response => response.json())
                 .then(
                     result => {
                         const allSuggestions = result.suggestions
-                        const filtered = allSuggestions.filter( item =>{
-                            return ( item.searchterm.match(regex))
+                        const filtered = allSuggestions.filter(item => {
+                            return item.searchterm.match(regex)
                         })
                         setFilteredData(filtered)
                     },
@@ -43,16 +41,17 @@ export default function Main() {
                     }
                 )
         }
-        fetchData()
-    }
-
     }, [searchWord])
 
     return (
         <Wrapper>
             <Header />
             <div className="search">
-                <SearchInput data={filteredData} searchWord={searchWord} setSearchWord={setSearchWord} />
+                <InputSearch
+                    filteredData={filteredData}
+                    searchWord={searchWord}
+                    setSearchWord={setSearchWord}
+                />
             </div>
         </Wrapper>
     )

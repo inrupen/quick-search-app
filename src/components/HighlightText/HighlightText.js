@@ -1,5 +1,5 @@
-import React from "react"
-import styled from "styled-components"
+import React from 'react'
+import styled from 'styled-components'
 
 const Div = styled.div`
     color: #6d6d6d;
@@ -19,7 +19,7 @@ const Div = styled.div`
 
 export default function Highlight({ searchWord, string, number }) {
     function strongString(input) {
-        return `<strong>${input}</strong>`
+        return `<strong class="strong">${input}</strong>`
     }
     function highlightString() {
         let finalString = ""
@@ -41,7 +41,7 @@ export default function Highlight({ searchWord, string, number }) {
                         strongString(splitString[1])
                 }
             } else {
-                finalString = `<strong>${string}</strong>`
+                finalString = `<strong class="strong">${string}</strong>`
             }
             finalString += ` (${number})`
         }

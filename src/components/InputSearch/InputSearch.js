@@ -1,11 +1,10 @@
 import React from "react"
 import styled from "styled-components"
-import search from "../assets/icon-search.png"
-import cancel from "../assets/icon-cancel.png"
-import Highlight from "./Highlight"
+import search from "../../assets/icon-search.png"
+import cancel from "../../assets/icon-cancel.png"
+import HighlightText from "../HighlightText/HighlightText"
 
 const Wrapper = styled.div`
-
     margin: 1rem;
     border: 1px solid #f1f1f1;
     border-radius: 2px;
@@ -13,6 +12,22 @@ const Wrapper = styled.div`
     cursor: pointer;
     transition: 0.2s;
     padding: 0.7rem;
+
+    .delete-icon {
+        display: none;
+    }
+
+    @-moz-document url-prefix() {   /* input-search cancel-button-webkit not working for firefox */
+        .delete-icon {
+            display: inline;
+            position: relative;
+            right: 20.7%;
+            color: #4c4c4c;
+            height: 13px;
+            width: 14px;
+            cursor: pointer;
+        }
+    }
 `
 const Input = styled.input`
     width: 18rem;
@@ -36,25 +51,48 @@ const Input = styled.input`
         height: 13px;
         width: 14px;
         content: url(${cancel});
+        cursor: pointer;
     }
 `
 
-export default function SearchInput({ searchWord, setSearchWord, data }) {
+export default function InputSearch({
+    searchWord,
+    setSearchWord,
+    filteredData,
+}) {
     function handleChange(event) {
         setSearchWord(event.target.value)
+    }
+    function clear() {
+        setSearchWord("")
     }
 
     return (
         <Wrapper>
             <Input
                 type="search"
+                id="search"
+                data-testid="search"
                 placeholder="Zoeken"
                 aria-label="Search through sites content"
                 onChange={handleChange}
+                value={searchWord}
+                maxLength="20"
             />
-                { searchWord && data.map((item, i) => (
+            {searchWord && (
+                <img
+                    data-testid="delete-icon"
+                    className="delete-icon"
+                    onClick={clear}
+                    alt="clear all"
+                    src={cancel}
+                ></img>
+            )}
+
+            {searchWord &&
+                filteredData.map((item, i) => (
                     <div key={i}>
-                        <Highlight 
+                        <HighlightText
                             searchWord={searchWord}
                             string={item.searchterm}
                             number={item.nrResults}
